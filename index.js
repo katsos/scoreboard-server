@@ -18,8 +18,8 @@ app.use(bodyParser.json());
 // support URL-encoded bodies
 app.use(
   bodyParser.urlencoded({
-    extended: true
-  })
+    extended: true,
+  }),
 );
 
 const client = new Client({ ssl: true });
@@ -27,7 +27,7 @@ client.connect();
 
 app.get('/', (req, res) => {
   res.send({
-    online_users: onlineUsers.length
+    online_users: onlineUsers.length,
   });
 });
 
@@ -40,7 +40,7 @@ app.get('/scores', (req, res) => {
   db.each(
     'SELECT * from users ORDER BY highscore DESC',
     (err, row) => response.push(row),
-    () => res.send(response)
+    () => res.send(response),
   );
 });
 
@@ -99,7 +99,7 @@ async function addScore(data) {
   try {
     const res = await client.query('INSERT INTO users(username, highscore) VALUES ($1, $2)', [
       data.username,
-      data.highscore
+      data.highscore,
     ]);
     return res.rows[0];
   } catch (err) {
