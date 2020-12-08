@@ -1,24 +1,35 @@
-'use strict';
-const express = require('express');
-const entities = require('entities');
-const sqlite3 = require('sqlite3').verbose();
-const crypto = require('crypto');
+const bodyParser = require('body-parser');
 const cors = require('cors');
-const morgan  = require('morgan')
+const crypto = require('crypto');
+const entities = require('entities');
+const express = require('express');
+const morgan = require('morgan');
+const { Client } = require('pg');
 
 /* APP CONFIGS */
-let app = express();
-app.use(cors());
-app.use(morgan('dev'))
-app.listen(8888);
-const bodyParser = require('body-parser');
-app.use(bodyParser.json()); // support JSON-encoded bodies
-app.use(bodyParser.urlencoded({ // support URL-encoded bodies
-  extended: true
-}));
+const app = express();
+const onlineUsers = [];
 
-let db = new sqlite3.cached.Database('./db.sqlite3');
-let onlineUsers = [];
+app.use(cors());
+app.use(morgan('dev'));
+app.listen(8888);
+// support JSON-encoded bodies
+app.use(bodyParser.json());
+// support URL-encoded bodies
+app.use(
+  bodyParser.urlencoded({
+    extended: true
+  })
+);
+
+const client = new Client();
+(async () => {
+  try {
+    await client.connect();
+  } catch (err) {
+    console.error(err);
+  }
+})();
 
 app.get('/', (req, res) => {
     res.send({
@@ -77,12 +88,18 @@ function isAuthorizedUser(ip, token) {
     return (!!is);
 }
 
-function addScore(data, cb) {
-    data.username = entities.encode(data.username);
-    data.highscore = entities.encode(data.highscore.toString());
+async function addScore(data) {
+  data.username = entities.encode(data.username);
+  data.highscore = entities.encode(data.highscore.toString());
 
-    db.serialize(() => {
-        db.run('INSERT INTO users(username, highscore) VALUES (?,?)', [data.username, data.highscore]);
-        cb();
-    });
+  try {
+    const res = await client.query('INSERT INTO users(username, highscore) VALUES ($1, $2)', [
+      data.username,
+      data.highscore
+    ]);
+    return res.rows[0];
+  } catch (err) {
+    console.error(err.stack);
+    return {};
+  }
 }
