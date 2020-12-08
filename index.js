@@ -43,7 +43,8 @@ app.get('/scoreboard', async (req, res) => {
 });
 
 app.post('/score', async (req, res) => {
-  if (!req.body.username || !req.body.score || !req.body.token) {
+  const { username, score, token } = req.body;
+  if (!username || !score || !token) {
     return res.status(403).end('Invalid parameters');
   }
 
@@ -53,7 +54,8 @@ app.post('/score', async (req, res) => {
     return res.status(403).end('No matching session');
   }
 
-  if (!isAuthorizedUser(userFound.ip, req.body.token)) {
+  console.log(JSON.stringify({ onlineUsers }));
+  if (!onlineUsers.find(u => u.token === token)) {
     return res.status(403).end('Authorization failed!');
   }
 
@@ -81,15 +83,6 @@ function generateKey() {
   let sha = crypto.createHash('sha256');
   sha.update(Math.random().toString());
   return sha.digest('hex');
-}
-
-/**
- * Search all online users if those credentials belong to any of them.
- * @returns {undefined|integer} Undefined for non found user, or the index of user in "onlineUsers"
- */
-function isAuthorizedUser(ip, token) {
-  let is = onlineUsers.find(user => user.ip === ip && user.token === token);
-  return !!is;
 }
 
 async function addScore(data) {
