@@ -13,7 +13,7 @@ const onlineUsers = [];
 const port = process.env.PORT || 3000;
 
 app.use(cors());
-app.use(morgan('dev'));
+app.use(morgan('common'));
 // support JSON-encoded bodies
 app.use(bodyParser.json());
 // support URL-encoded bodies
