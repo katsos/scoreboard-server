@@ -69,17 +69,15 @@ app.post('/score', async (req, res) => {
 });
 
 app.post('/session', (req, res) => {
-  const userIp = req.ip;
-  const usertoken = generateKey();
+  const { ip } = req;
+  const token = generateKey();
 
-  let found = onlineUsers.find(user => {
-    if (user.ip !== userIp) return;
-    user.token = usertoken;
-    return true;
-  });
+  const user = onlineUsers.find(u => u.ip === ip);
+  if (!user) {
+    onlineUsers.push({ ip, token });
+  }
 
-  if (!found) onlineUsers.push({ ip: userIp, token: usertoken });
-  res.header('token', usertoken).send();
+  res.status(201).json({ token });
 });
 
 function generateKey() {
