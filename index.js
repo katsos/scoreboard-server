@@ -42,8 +42,12 @@ app.get('/', (req, res) => {
  * Anyone can see scores.
  */
 app.get('/scores', (req, res) => {
-    let response = [];
-    db.each('SELECT * from users ORDER BY highscore DESC', (err, row) => response.push(row), () => res.send(response));
+  let response = [];
+  db.each(
+    'SELECT * from users ORDER BY highscore DESC',
+    (err, row) => response.push(row),
+    () => res.send(response)
+  );
 });
 
 app.post('/score', (req, res) => {
