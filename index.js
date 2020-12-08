@@ -22,7 +22,11 @@ app.use(
   }),
 );
 
-const client = new Client({ ssl: true });
+const client = new Client({
+  ssl: {
+    rejectUnauthorized: false,
+  },
+});
 client.connect();
 
 app.get('/', (req, res) => {
