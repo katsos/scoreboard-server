@@ -14,7 +14,6 @@ const port = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(morgan('dev'));
-app.listen(port);
 // support JSON-encoded bodies
 app.use(bodyParser.json());
 // support URL-encoded bodies
@@ -77,6 +76,10 @@ app.post('/session', (req, res) => {
   }
 
   res.status(201).json({ token });
+});
+
+app.listen(port, () => {
+  console.log(`Server listening to port ${port}`);
 });
 
 function generateKey() {
