@@ -1,6 +1,7 @@
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const crypto = require('crypto');
+const get = require('lodash.get');
 const entities = require('entities');
 const express = require('express');
 const morgan = require('morgan');
@@ -35,14 +36,11 @@ app.get('/', (req, res) => {
   });
 });
 
-/**
- * /scores route has no restrictions.
- * Anyone can see scores.
- */
-app.get('/scores', (req, res) => {
+app.get('/scoreboard', async (req, res) => {
   try {
-    const response = client.query('SELECT * from users ORDER BY score DESC');
-    res.send(response);
+    const response = await client.query('SELECT * from users ORDER BY score DESC');
+    const scoreboard = get(response, 'rows', []);
+    res.json(scoreboard);
   } catch (err) {
     console.error(err);
     res.status(500).json(err);
