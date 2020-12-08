@@ -22,14 +22,8 @@ app.use(
   })
 );
 
-const client = new Client();
-(async () => {
-  try {
-    await client.connect();
-  } catch (err) {
-    console.error(err);
-  }
-})();
+const client = new Client({ ssl: true });
+client.connect();
 
 app.get('/', (req, res) => {
   res.send({
