@@ -10,10 +10,11 @@ const { Client } = require('pg');
 /* APP CONFIGS */
 const app = express();
 const onlineUsers = [];
+const port = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(morgan('dev'));
-app.listen(8888);
+app.listen(port);
 // support JSON-encoded bodies
 app.use(bodyParser.json());
 // support URL-encoded bodies
