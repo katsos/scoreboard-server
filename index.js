@@ -36,16 +36,17 @@ app.get('/', (req, res) => {
  * Anyone can see scores.
  */
 app.get('/scores', (req, res) => {
-  let response = [];
-  db.each(
-    'SELECT * from users ORDER BY highscore DESC',
-    (err, row) => response.push(row),
-    () => res.send(response),
-  );
+  try {
+    const response = client.query('SELECT * from users ORDER BY score DESC');
+    res.send(response);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json(err);
+  }
 });
 
 app.post('/score', async (req, res) => {
-  if (!req.body.username || !req.body.highscore || !req.body.token) {
+  if (!req.body.username || !req.body.score || !req.body.token) {
     return res.status(403).end('Invalid parameters');
   }
 
