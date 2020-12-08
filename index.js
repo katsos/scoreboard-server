@@ -99,13 +99,10 @@ function isAuthorizedUser(ip, token) {
 
 async function addScore(data) {
   data.username = entities.encode(data.username);
-  data.highscore = entities.encode(data.highscore.toString());
+  data.score = entities.encode(data.score.toString());
 
   try {
-    const res = await client.query('INSERT INTO users(username, highscore) VALUES ($1, $2)', [
-      data.username,
-      data.highscore,
-    ]);
+    const res = await client.query('INSERT INTO users(username, score) VALUES ($1, $2)', [data.username, data.score]);
     return res.rows[0];
   } catch (err) {
     console.error(err.stack);
