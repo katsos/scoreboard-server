@@ -50,17 +50,23 @@ app.get('/scores', (req, res) => {
   );
 });
 
-app.post('/score', (req, res) => {
-    if (!req.body.username || !req.body.highscore || !req.body.token)return res.status(403).end('Invalid parameters');
+app.post('/score', async (req, res) => {
+  if (!req.body.username || !req.body.highscore || !req.body.token) {
+    return res.status(403).end('Invalid parameters');
+  }
 
-    let found = onlineUsers.find(user => {
-        if (user.ip !== req.ip) return;
-        if (!isAuthorizedUser(user.ip, req.body.token)) return res.status(403).end('Authorization failed!');
-        addScore(req.body,() => res.status(200).end('Score added!'));
-        return true;
-    });
+  const userFound = onlineUsers.find(user => user.ip === req.ip);
 
-    if (!found) res.status(403).end('No matching session');
+  if (!userFound) {
+    return res.status(403).end('No matching session');
+  }
+
+  if (!isAuthorizedUser(user.ip, req.body.token)) {
+    return res.status(403).end('Authorization failed!');
+  }
+
+  await addScore(req.body);
+  res.status(200).end('Score added!');
 });
 
 app.post('/session', (req, res) => {
