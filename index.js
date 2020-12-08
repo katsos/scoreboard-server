@@ -2,10 +2,9 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const crypto = require('crypto');
 const get = require('lodash.get');
-const entities = require('entities');
 const express = require('express');
 const morgan = require('morgan');
-const { Client } = require('pg');
+const { Pool } = require('pg');
 
 const onlineUsers = [];
 const port = process.env.PORT || 3000;
@@ -94,9 +93,6 @@ function isAuthorizedUser(ip, token) {
 }
 
 async function addScore(data) {
-  data.username = entities.encode(data.username);
-  data.score = entities.encode(data.score.toString());
-
   try {
     const res = await client.query('INSERT INTO users(username, score) VALUES ($1, $2)', [data.username, data.score]);
     return res.rows[0];
