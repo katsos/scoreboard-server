@@ -7,24 +7,20 @@ const express = require('express');
 const morgan = require('morgan');
 const { Client } = require('pg');
 
-/* APP CONFIGS */
-const app = express();
 const onlineUsers = [];
 const port = process.env.PORT || 3000;
 
+const isProduction = process.env.NODE_ENV === 'production';
+const connectionString = `postgresql://${process.env.PGUSER}:${process.env.PGPASSWORD}@${process.env.PGHOST}:${process.env.PGPORT}/${process.env.PGDATABASE}`;
+
+const app = express();
 app.use(cors());
 app.use(morgan('common'));
-// support JSON-encoded bodies
-app.use(bodyParser.json());
-// support URL-encoded bodies
-app.use(
-  bodyParser.urlencoded({
-    extended: true,
-  }),
-);
+app.use(bodyParser.json()); // support JSON-encoded bodies
 
-const client = new Client({
-  ssl: {
+const client = new Pool({
+  connectionString: isProduction ? process.env.DATABASE_URL : connectionString,
+  ssl: isProduction || {
     rejectUnauthorized: false,
   },
 });
