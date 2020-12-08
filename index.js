@@ -60,32 +60,32 @@ app.post('/score', (req, res) => {
 });
 
 app.post('/session', (req, res) => {
-    const userIp = req.ip;
-    const usertoken = generateKey();
+  const userIp = req.ip;
+  const usertoken = generateKey();
 
-    let found = onlineUsers.find(user => {
-        if (user.ip !== userIp) return;
-        user.token = usertoken;
-        return true;
-    });
+  let found = onlineUsers.find(user => {
+    if (user.ip !== userIp) return;
+    user.token = usertoken;
+    return true;
+  });
 
-    if (!found) onlineUsers.push({ip: userIp, token: usertoken});
-    res.header('token', usertoken).send();
+  if (!found) onlineUsers.push({ ip: userIp, token: usertoken });
+  res.header('token', usertoken).send();
 });
 
 function generateKey() {
-    let sha = crypto.createHash('sha256');
-    sha.update(Math.random().toString());
-    return sha.digest('hex');
-};
+  let sha = crypto.createHash('sha256');
+  sha.update(Math.random().toString());
+  return sha.digest('hex');
+}
 
 /**
  * Search all online users if those credentials belong to any of them.
  * @returns {undefined|integer} Undefined for non found user, or the index of user in "onlineUsers"
  */
 function isAuthorizedUser(ip, token) {
-    let is = onlineUsers.find(user => user.ip === ip && user.token === token);
-    return (!!is);
+  let is = onlineUsers.find(user => user.ip === ip && user.token === token);
+  return !!is;
 }
 
 async function addScore(data) {
