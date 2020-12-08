@@ -32,9 +32,9 @@ const client = new Client();
 })();
 
 app.get('/', (req, res) => {
-    res.send({
-        online_users: onlineUsers.length
-    });
+  res.send({
+    online_users: onlineUsers.length
+  });
 });
 
 /**
