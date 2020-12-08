@@ -3,6 +3,9 @@
   "version": "0.0.1",
   "description": "Global Game Jam 2017 (Athens) - NanoWaves Server",
   "main": "index.js",
+  "engines": {
+    "node": ">=10.18"
+  },
   "scripts": {
     "clear": "rm -Rf node_modules",
     "dev": "nodemon index.js",
