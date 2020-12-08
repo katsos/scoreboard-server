@@ -18,7 +18,10 @@
   },
   "keywords": [
     "game",
-    "global-game-jam",
+    "game-jam",
+    "scoreboard",
+    "minimal",
+    "experimental",
     "server"
   ],
   "author": "Nikos Katsos <nikoskatsos101@gmail.com>",
