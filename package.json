@@ -8,9 +8,8 @@
     "yarn": "1.x"
   },
   "scripts": {
-    "clear": "rm -Rf node_modules",
     "dev": "nodemon index.js",
-    "start": "forever start index.js"
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
