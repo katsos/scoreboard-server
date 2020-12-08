@@ -60,7 +60,7 @@ app.post('/score', async (req, res) => {
     return res.status(403).end('No matching session');
   }
 
-  if (!isAuthorizedUser(user.ip, req.body.token)) {
+  if (!isAuthorizedUser(userFound.ip, req.body.token)) {
     return res.status(403).end('Authorization failed!');
   }
 
