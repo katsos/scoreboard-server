@@ -5,6 +5,7 @@ const get = require('lodash.get');
 const express = require('express');
 const morgan = require('morgan');
 const { Pool } = require('pg');
+const process = require('process');
 
 const onlineUsers = [];
 const port = process.env.PORT || 3000;
