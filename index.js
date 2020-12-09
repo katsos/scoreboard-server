@@ -50,8 +50,6 @@ app.post('/score', async (req, res) => {
   }
 
   console.log(JSON.stringify({ onlineUsers }));
-
-  console.log('/score', JSON.stringify({ 'user.ip': user.ip, 'req.ip': req.ip }));
   const userFound = onlineUsers.find(user => user.ip === req.ip);
 
   console.log('/score', 'userFound', userFound);
