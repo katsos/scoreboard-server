@@ -44,7 +44,8 @@ app.get('/scoreboard', async (req, res) => {
 
 app.post('/score', async (req, res) => {
   const { username, score, token } = req.body;
-  if (!username || !score || !token) {
+  const isScoreInvalid = !score && score !== 0;
+  if (isScoreInvalid || !username || !token) {
     return res.status(403).end('Invalid parameters');
   }
 
