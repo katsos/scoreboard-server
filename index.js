@@ -87,7 +87,8 @@ function generateKey() {
 
 async function addScore(data) {
   try {
-    const res = await client.query('INSERT INTO users(username, score) VALUES ($1, $2)', [data.username, data.score]);
+    const score = parseInt(data.score);
+    const res = await client.query('INSERT INTO users(username, score) VALUES ($1, $2)', [data.username, score]);
     return res.rows[0];
   } catch (err) {
     console.error(err.stack);
