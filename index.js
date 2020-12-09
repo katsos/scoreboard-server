@@ -49,13 +49,16 @@ app.post('/score', async (req, res) => {
     return res.status(403).end('Invalid parameters');
   }
 
+  console.log(JSON.stringify({ onlineUsers }));
+
+  console.log('/score', JSON.stringify({ 'user.ip': user.ip, 'req.ip': req.ip }));
   const userFound = onlineUsers.find(user => user.ip === req.ip);
 
+  console.log('/score', 'userFound', userFound);
   if (!userFound) {
     return res.status(403).end('No matching session');
   }
 
-  console.log(JSON.stringify({ onlineUsers }));
   if (!onlineUsers.find(u => u.token === token)) {
     return res.status(403).end('Authorization failed!');
   }
