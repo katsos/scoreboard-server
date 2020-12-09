@@ -72,11 +72,12 @@ app.post('/session', (req, res) => {
   const token = generateKey();
 
   const user = onlineUsers.find(u => u.ip === ip);
-  if (!user) {
-    onlineUsers.push({ ip, token });
+  if (user) {
+    return res.status(201).json({ token: user.token });
   }
 
-  res.status(201).json({ token });
+  onlineUsers.push({ ip, token });
+  return res.status(201).json({ token });
 });
 
 app.listen(port, () => {
